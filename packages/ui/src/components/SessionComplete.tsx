@@ -103,23 +103,23 @@ export function SessionComplete(props: SessionCompleteProps) {
             animationDelay: `${500 + index * 80}ms`,
           }}
         >
-          <CardContent className="flex items-center justify-between py-3 px-4">
-            <span className="text-sm font-medium truncate flex-1 font-[family-name:var(--font-geist-sans)]">
+          <CardContent className="flex items-center justify-between py-4 px-4">
+            <span className="text-base font-medium truncate flex-1">
               {ex.name}
             </span>
-            <div className="flex items-center gap-2">
-              <span className="font-mono text-sm">
+            <div className="flex items-center gap-3">
+              <span className="font-mono text-base font-semibold">
                 {reps.join(' · ')}
                 {ex.unit === 'seconds' ? 's' : ''}
               </span>
               {improved === 'up' && (
-                <TrendingUp className="w-4 h-4 text-green-500" />
+                <TrendingUp className="w-5 h-5 text-green-500 shrink-0" />
               )}
               {improved === 'down' && (
-                <TrendingDown className="w-4 h-4 text-red-500" />
+                <TrendingDown className="w-5 h-5 text-red-500 shrink-0" />
               )}
               {improved === 'same' && prevReps && (
-                <Minus className="w-4 h-4 text-muted-foreground" />
+                <Minus className="w-5 h-5 text-muted-foreground shrink-0" />
               )}
             </div>
           </CardContent>
@@ -136,11 +136,11 @@ export function SessionComplete(props: SessionCompleteProps) {
           animationDelay: `${500 + index * 80}ms`,
         }}
       >
-        <CardContent className="flex items-center justify-between py-3 px-4">
-          <span className="text-sm font-medium truncate flex-1 font-[family-name:var(--font-geist-sans)]">
+        <CardContent className="flex items-center justify-between py-4 px-4">
+          <span className="text-base font-medium truncate flex-1">
             {ex.name}
           </span>
-          <span className="font-mono text-sm text-muted-foreground">
+          <span className="font-mono text-base text-muted-foreground font-semibold">
             {ex.duration}s{ex.sides ? ' × 2 sides' : ''}
           </span>
         </CardContent>
@@ -168,14 +168,14 @@ export function SessionComplete(props: SessionCompleteProps) {
           style={{ animation: 'bounce-in 350ms cubic-bezier(0.34, 1.56, 0.64, 1) 100ms backwards' }}
         />
         <h1
-          className="text-2xl font-bold tracking-tight"
+          className="text-4xl font-bold tracking-tight"
           style={{ animation: 'slide-up-in 260ms ease-out 200ms backwards' }}
         >
           {isWorkout ? 'SESSION COMPLETE' : 'MOBILITY COMPLETE'}
         </h1>
         {hasDifficultyIncrease && (
           <p
-            className="text-xs text-orange-400 uppercase tracking-widest font-mono"
+            className="text-sm text-orange-400 uppercase tracking-widest font-mono font-semibold"
             style={{ animation: 'slide-up-in 260ms ease-out 340ms backwards' }}
           >
             ↑ DIFFICULTY UP NEXT SESSION
@@ -200,9 +200,9 @@ export function SessionComplete(props: SessionCompleteProps) {
       )}
 
       {/* Summary */}
-      <div className="w-full max-w-sm flex-1 min-h-0 flex flex-col gap-2">
+      <div className="w-full max-w-sm flex-1 min-h-0 flex flex-col gap-3">
         <div
-          className="flex items-center justify-between px-4 text-xs text-muted-foreground uppercase tracking-widest shrink-0"
+          className="flex items-center justify-between px-4 text-sm text-muted-foreground uppercase tracking-widest shrink-0 font-semibold"
           style={{ animation: 'stagger-in 260ms ease-out 280ms backwards' }}
         >
           <span>Exercise</span>
@@ -221,32 +221,32 @@ export function SessionComplete(props: SessionCompleteProps) {
           animationDelay: `${500 + cardCount * 80}ms`,
         }}
       >
-        <Calendar className="w-5 h-5 text-muted-foreground" />
+        <Calendar className="w-6 h-6 text-muted-foreground" />
         <Progress
           value={(weekProgress.completed / weekProgress.total) * 100}
-          className="flex-1 h-2"
+          className="flex-1 h-3"
         />
-        <span className="text-sm font-mono text-muted-foreground">
+        <span className="text-base font-mono text-muted-foreground font-semibold">
           {weekProgress.completed}/{weekProgress.total} this week
         </span>
       </div>
 
       {/* Sync status */}
       {syncStatus !== 'idle' && (
-        <div role="status" aria-live="polite" className="flex items-center gap-1.5 text-xs text-muted-foreground">
-          {syncStatus === 'syncing' && <Loader2 className="w-3 h-3 animate-spin" />}
-          {syncStatus === 'success' && <Check className="w-3 h-3 text-green-500" />}
-          {syncStatus === 'failed' && <WifiOff className="w-3 h-3" />}
+        <div role="status" aria-live="polite" className="flex items-center gap-2 text-sm text-muted-foreground font-medium">
+          {syncStatus === 'syncing' && <Loader2 className="w-4 h-4 animate-spin" />}
+          {syncStatus === 'success' && <Check className="w-4 h-4 text-green-500" />}
+          {syncStatus === 'failed' && <WifiOff className="w-4 h-4" />}
           <span>
             {syncStatus === 'syncing' ? 'Syncing with desktop...' : syncStatus === 'success' ? 'Synced' : 'Desktop not reachable'}
           </span>
           {syncStatus === 'failed' && (
             <button
               onClick={attemptSync}
-              className="flex items-center gap-1 ml-1 text-muted-foreground hover:text-foreground transition-colors"
+              className="flex items-center gap-1.5 ml-1 text-muted-foreground hover:text-foreground transition-colors active:scale-95"
               aria-label="Retry sync"
             >
-              <RefreshCw className="w-3 h-3" />
+              <RefreshCw className="w-4 h-4" />
               <span>Retry</span>
             </button>
           )}
@@ -256,6 +256,7 @@ export function SessionComplete(props: SessionCompleteProps) {
       {/* Done button */}
       <Button
         onClick={props.onDone}
+        size="lg"
         className="w-full max-w-sm rounded-full active:scale-95 transition-transform shrink-0"
         style={{
           animation: 'stagger-in 260ms ease-out backwards',

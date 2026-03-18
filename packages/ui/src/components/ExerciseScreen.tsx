@@ -101,24 +101,25 @@ export function ExerciseScreen({
           <button
             type="button"
             onClick={() => setShowInstruction(false)}
-            className="flex items-center gap-3 p-4 text-left"
+            className="flex items-center gap-3 p-4 text-left active:scale-95"
             aria-label="Close how to"
           >
-            <ChevronLeft className="w-6 h-6 text-muted-foreground shrink-0" />
-            <h2 className="text-lg font-semibold flex-1">{exercise.name}</h2>
+            <ChevronLeft className="w-7 h-7 text-muted-foreground shrink-0" />
+            <h2 className="text-2xl font-bold flex-1">{exercise.name}</h2>
           </button>
-          <div className="flex-1 flex flex-col items-center justify-center gap-6 px-4 pb-8 overflow-y-auto min-h-0">
+          <div className="flex-1 flex flex-col items-center justify-center gap-8 px-4 pb-8 overflow-y-auto min-h-0">
             {exercise.youtubeId && (
               <div className="w-full max-w-sm">
                 <ExerciseDemo youtubeId={exercise.youtubeId} title={exercise.name} />
               </div>
             )}
-            <p className="text-sm text-muted-foreground text-center max-w-sm leading-relaxed">
+            <p className="text-base text-muted-foreground text-center max-w-sm leading-relaxed font-medium">
               {exercise.instruction}
             </p>
             <Button
               variant="outline"
-              className="rounded-full px-6"
+              size="lg"
+              className="rounded-full px-8"
               onClick={() => setShowInstruction(false)}
             >
               Got it
@@ -138,46 +139,46 @@ export function ExerciseScreen({
       )}
 
       {/* Top bar - fixed so keyboard can't push it away */}
-      <div className="fixed top-0 left-0 right-0 z-10 bg-background flex items-center gap-3 p-4 pb-2">
+      <div className="fixed top-0 left-0 right-0 z-10 bg-background flex items-center gap-3 p-4 pb-3">
         <button
           type="button"
           onClick={() => setShowQuitConfirm(true)}
-          className="p-1 text-muted-foreground hover:text-foreground transition-colors shrink-0"
+          className="p-2 text-muted-foreground hover:text-foreground transition-colors shrink-0 active:scale-95"
           aria-label="Quit workout"
         >
-          <X className="w-5 h-5" />
+          <X className="w-6 h-6" />
         </button>
-        <Progress value={progressPercent} className="flex-1 h-1.5" />
-        <span className="text-xs text-muted-foreground font-mono">
+        <Progress value={progressPercent} className="flex-1 h-2" />
+        <span className="text-sm text-muted-foreground font-mono font-semibold">
           {exerciseIndex + 1}/{totalExercises}
         </span>
       </div>
 
       {/* Main content */}
-      <div className="flex-1 flex flex-col items-center justify-center gap-3 overflow-y-auto min-h-0 px-4 py-2 pt-14">
+      <div className="flex-1 flex flex-col items-center justify-center gap-6 overflow-y-auto min-h-0 px-4 py-2 pt-16">
         {/* Exercise name + how to */}
-        <div className="flex flex-col items-center gap-1.5 shrink-0">
-          <h1 className="text-xl sm:text-3xl font-bold tracking-tight text-center font-[family-name:var(--font-geist-sans)]">
+        <div className="flex flex-col items-center gap-3 shrink-0">
+          <h1 className="text-3xl sm:text-4xl font-bold tracking-tight text-center">
             {exercise.name}
           </h1>
           <button
             type="button"
             onClick={() => setShowInstruction(true)}
-            className="flex items-center gap-1.5 text-xs transition-colors border rounded-full px-3 py-1 text-muted-foreground/80 hover:text-foreground border-muted-foreground/30"
+            className="flex items-center gap-2 text-sm transition-colors border rounded-full px-4 py-2 text-muted-foreground/80 hover:text-foreground border-muted-foreground/30 active:scale-95 font-medium"
           >
-            <Info className="w-3.5 h-3.5" />
-            <span>how to</span>
+            <Info className="w-5 h-5" />
+            <span>How to</span>
           </button>
         </div>
 
         {/* Set dots + last set badge */}
-        <div className="flex flex-col items-center gap-1.5 shrink-0">
-          <div className="flex gap-2">
+        <div className="flex flex-col items-center gap-2 shrink-0">
+          <div className="flex gap-3">
             {Array.from({ length: setsPerExercise }).map((_, i) => (
               <div
                 key={i === currentSet - 1 ? `dot-${i}-${currentSet}` : i}
                 className={cn(
-                  'w-3 h-3 rounded-full transition-colors',
+                  'w-4 h-4 rounded-full transition-colors',
                   i < currentSet
                     ? 'bg-foreground'
                     : i === currentSet
@@ -193,7 +194,7 @@ export function ExerciseScreen({
             ))}
           </div>
           {currentSet === setsPerExercise - 1 && (
-            <span className="text-[10px] uppercase tracking-widest text-muted-foreground/60">
+            <span className="text-xs uppercase tracking-widest text-muted-foreground/60 font-semibold">
               Last set
             </span>
           )}
@@ -210,15 +211,15 @@ export function ExerciseScreen({
 
         {/* Previous performance */}
         {previousRep !== null && (
-          <div className="flex items-center gap-2 text-muted-foreground shrink-0">
+          <div className="flex items-center gap-2 text-muted-foreground shrink-0 text-xl">
             {flashColor === 'green' ? (
-              <TrendingUp className="w-4 h-4 text-green-500" />
+              <TrendingUp className="w-6 h-6 text-green-500" />
             ) : flashColor === 'red' ? (
-              <TrendingDown className="w-4 h-4 text-red-500" />
+              <TrendingDown className="w-6 h-6 text-red-500" />
             ) : (
-              <Minus className="w-4 h-4" />
+              <Minus className="w-6 h-6" />
             )}
-            <span className="text-lg font-mono">{previousRep}</span>
+            <span className="text-2xl font-mono font-bold">{previousRep}</span>
           </div>
         )}
       </div>

@@ -92,20 +92,20 @@ export function RestTimer({ seconds, isPaused, onPauseToggle, onSkip, onQuit, on
   const progress = ((REST_DURATION - seconds) / REST_DURATION) * 100;
 
   return (
-    <div className="flex flex-col items-center justify-center h-[100dvh] bg-background p-4 sm:p-6 gap-6 sm:gap-8">
+    <div className="flex flex-col items-center justify-center h-[100dvh] bg-background p-4 sm:p-6 gap-8 sm:gap-10">
       {/* Quit */}
       <div className="absolute top-4 left-4 sm:top-6 sm:left-6">
         <button
           type="button"
           onClick={() => setShowQuitConfirm(true)}
-          className="p-1 text-muted-foreground hover:text-foreground transition-colors"
+          className="p-2 text-muted-foreground hover:text-foreground transition-colors active:scale-95"
           aria-label="Quit workout"
         >
-          <X className="w-5 h-5" />
+          <X className="w-7 h-7" />
         </button>
       </div>
 
-      <Timer className="w-8 h-8 text-muted-foreground" />
+      <Timer className="w-10 h-10 text-muted-foreground" />
 
       {/* Screen reader announcement at key moments */}
       {srAnnouncement && (
@@ -113,7 +113,7 @@ export function RestTimer({ seconds, isPaused, onPauseToggle, onSkip, onQuit, on
       )}
 
       {/* Circular timer — conic-gradient ring, compositor-accelerated via @property */}
-      <div className="relative w-48 h-48 flex items-center justify-center">
+      <div className="relative w-56 h-56 sm:w-64 sm:h-64 flex items-center justify-center">
         <div
           aria-label="Rest timer progress"
           className="absolute inset-0 rounded-full"
@@ -132,10 +132,10 @@ export function RestTimer({ seconds, isPaused, onPauseToggle, onSkip, onQuit, on
           aria-live="off"
           className={`font-mono font-bold tracking-wider transition-colors duration-300 ${
             seconds <= 3 && seconds > 0
-              ? 'text-yellow-500 text-6xl'
+              ? 'text-yellow-500 text-7xl sm:text-8xl'
               : isPaused
-                ? 'text-muted-foreground text-5xl'
-                : 'text-5xl'
+                ? 'text-muted-foreground text-6xl sm:text-7xl'
+                : 'text-6xl sm:text-7xl'
           }`}
           style={seconds <= 3 && seconds > 0 ? { animation: 'countdown-pulse 0.15s ease-out' } : undefined}
           key={seconds <= 3 ? seconds : 'normal'}
@@ -146,13 +146,13 @@ export function RestTimer({ seconds, isPaused, onPauseToggle, onSkip, onQuit, on
 
       {/* Context label — tells user what's coming next */}
       {restLabel && (
-        <p className="text-xs uppercase tracking-widest text-muted-foreground/60 -mt-2">
+        <p className="text-sm uppercase tracking-widest text-muted-foreground/60 -mt-2 font-semibold">
           {restLabel}
         </p>
       )}
 
       {/* Action buttons: undo · pause · skip */}
-      <div className="flex items-center gap-4">
+      <div className="flex items-center gap-6 sm:gap-8">
         {/* Hold-to-undo button — prevents accidental taps */}
         <button
           type="button"
@@ -160,7 +160,7 @@ export function RestTimer({ seconds, isPaused, onPauseToggle, onSkip, onQuit, on
           onPointerUp={cancelUndo}
           onPointerLeave={cancelUndo}
           onPointerCancel={cancelUndo}
-          className="relative rounded-full w-14 h-14 flex items-center justify-center text-muted-foreground hover:text-foreground transition-colors select-none touch-none overflow-hidden"
+          className="relative rounded-full w-16 h-16 sm:w-18 sm:h-18 flex items-center justify-center text-muted-foreground hover:text-foreground transition-colors select-none touch-none overflow-hidden active:scale-95"
           aria-label="Hold to undo last set"
           style={{ WebkitUserSelect: 'none' }}
         >
@@ -173,14 +173,14 @@ export function RestTimer({ seconds, isPaused, onPauseToggle, onSkip, onQuit, on
               }}
             />
           )}
-          <RotateCcw className="w-5 h-5 relative z-10" />
+          <RotateCcw className="w-6 h-6 relative z-10" />
         </button>
 
         <Button
           variant="outline"
-          size="lg"
+          size="icon-xl"
           onClick={onPauseToggle}
-          className="rounded-full w-16 h-16 active:scale-95 transition-transform"
+          className="rounded-full active:scale-95 transition-transform"
           aria-label={isPaused ? 'Resume timer' : 'Pause timer'}
         >
           {isPaused ? <Play className="w-7 h-7" /> : <Pause className="w-7 h-7" />}
@@ -188,12 +188,12 @@ export function RestTimer({ seconds, isPaused, onPauseToggle, onSkip, onQuit, on
 
         <Button
           variant="ghost"
-          size="lg"
+          size="icon-lg"
           onClick={onSkip}
-          className="rounded-full w-14 h-14 active:scale-95 transition-transform text-muted-foreground hover:text-foreground"
+          className="rounded-full active:scale-95 transition-transform text-muted-foreground hover:text-foreground"
           aria-label="Skip rest"
         >
-          <SkipForward className="w-5 h-5" />
+          <SkipForward className="w-6 h-6" />
         </Button>
       </div>
 

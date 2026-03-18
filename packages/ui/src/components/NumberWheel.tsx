@@ -3,7 +3,7 @@
 import { useState, useRef, useEffect } from 'react';
 import { Check } from 'lucide-react';
 
-const ITEM_H = 60;
+const ITEM_H = 90;
 const VISIBLE = 5;
 const CENTER = Math.floor(VISIBLE / 2); // 2
 
@@ -217,8 +217,8 @@ export function NumberWheel({ defaultValue, min = 0, max, label, ariaLabel, onCo
   const numbers = Array.from({ length: max - min + 1 }, (_, i) => min + i);
 
   return (
-    <div className="flex flex-col items-center gap-4">
-      <span className="text-[10px] uppercase tracking-widest text-muted-foreground">{label}</span>
+    <div className="flex flex-col items-center gap-6">
+      <span className="text-base uppercase tracking-widest text-muted-foreground font-semibold">{label}</span>
 
       <div
         ref={containerRef}
@@ -229,7 +229,7 @@ export function NumberWheel({ defaultValue, min = 0, max, label, ariaLabel, onCo
         aria-valuemax={max}
         aria-label={ariaLabel ?? label}
         className="relative overflow-hidden select-none touch-none cursor-ns-resize focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 rounded-sm"
-        style={{ height: VISIBLE * ITEM_H, width: 120 }}
+        style={{ height: VISIBLE * ITEM_H, width: 160 }}
         onPointerDown={onPointerDown}
         onPointerMove={onPointerMove}
         onPointerUp={onPointerUp}
@@ -270,7 +270,7 @@ export function NumberWheel({ defaultValue, min = 0, max, label, ariaLabel, onCo
                 className="flex items-center justify-center font-mono font-bold"
                 style={{
                   height: ITEM_H,
-                  fontSize: isCenter ? 42 : distInt === 1 ? 26 : 18,
+                  fontSize: isCenter ? 60 : distInt === 1 ? 40 : 28,
                   // Hide center number when input is overlaid — same slot, same size
                   opacity: editing && isCenter ? 0 : Math.max(0.04, 1 - dist * 0.55),
                 }}
@@ -304,7 +304,7 @@ export function NumberWheel({ defaultValue, min = 0, max, label, ariaLabel, onCo
                 if (e.key === 'Escape') { e.preventDefault(); cancelEdit(); }
               }}
               className="w-full text-center font-mono font-bold bg-transparent border-none outline-none text-foreground caret-foreground [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
-              style={{ fontSize: 42 }}
+              style={{ fontSize: 60 }}
             />
           </div>
         )}
@@ -317,9 +317,9 @@ export function NumberWheel({ defaultValue, min = 0, max, label, ariaLabel, onCo
           if (editing) finishEdit(editText);
           else onConfirm(clamp(Math.round(floatRef.current)));
         }}
-        className="w-14 h-14 rounded-full bg-foreground text-background flex items-center justify-center active:scale-95 transition-transform shadow-md"
+        className="w-16 h-16 rounded-full bg-foreground text-background flex items-center justify-center active:scale-95 transition-transform shadow-md hover:bg-foreground/90"
       >
-        <Check className="w-7 h-7" />
+        <Check className="w-8 h-8" />
       </button>
     </div>
   );
