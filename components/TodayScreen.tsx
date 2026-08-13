@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect, useMemo } from 'react';
-import { Dumbbell, Play, CheckCircle, Smartphone, Flame, ChartBar, Copy, Volume2, VolumeX } from 'lucide-react';
+import { Dumbbell, Play, CheckCircle, Smartphone, Flame, ChartBar, Volume2, VolumeX } from 'lucide-react';
 import { Button } from '@traindaily/ui';
 import {
   ExerciseScreen,
@@ -339,7 +339,12 @@ function TodayContent({ date }: { date: Date }) {
 
       {/* Weekly Split — scrollable if needed */}
       <div className="flex-1 overflow-y-auto px-6 pb-2">
-        <WeeklySplit currentDate={date} data={workout.data} />
+        <WeeklySplit
+          currentDate={date}
+          data={workout.data}
+          onCopyRoutine={handleCopyRoutine}
+          copyStatus={copyStatus}
+        />
       </div>
 
       {/* Bottom actions */}
@@ -364,16 +369,6 @@ function TodayContent({ date }: { date: Date }) {
           >
             <ChartBar className="w-4 h-4" />
             <span className="text-sm">History</span>
-          </button>
-          <button
-            onClick={handleCopyRoutine}
-            aria-label="Copy routine"
-            className="flex items-center gap-2 px-4 py-2 rounded-full bg-muted/50 hover:bg-muted active:scale-95 transition-all"
-          >
-            <Copy className="w-4 h-4" />
-            <span className="text-sm" aria-live="polite">
-              {copyStatus === 'success' ? 'Copied!' : copyStatus === 'error' ? 'Copy failed' : 'Copy routine'}
-            </span>
           </button>
           <button
             onClick={toggleMute}

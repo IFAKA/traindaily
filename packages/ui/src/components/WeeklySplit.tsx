@@ -1,13 +1,15 @@
 'use client';
 
 import { startOfWeek, addDays, isSameDay, format } from 'date-fns';
-import { CheckCircle2, Circle, Dumbbell } from 'lucide-react';
+import { CheckCircle2, Circle, Copy, Dumbbell } from 'lucide-react';
 import { cn } from '../lib/utils';
 import { getWorkoutType, formatDateKey, WorkoutData, WorkoutType } from '@traindaily/core';
 
 interface WeeklySplitProps {
   currentDate: Date;
   data: WorkoutData;
+  onCopyRoutine?: () => void;
+  copyStatus?: 'idle' | 'success' | 'error';
 }
 
 const WORKOUT_TYPE_COLORS: Record<WorkoutType, string> = {
@@ -24,7 +26,7 @@ const WORKOUT_TYPE_LABELS: Record<WorkoutType, string> = {
   rest: 'REST',
 };
 
-export function WeeklySplit({ currentDate, data }: WeeklySplitProps) {
+export function WeeklySplit({ currentDate, data, onCopyRoutine, copyStatus = 'idle' }: WeeklySplitProps) {
   const weekStart = startOfWeek(currentDate, { weekStartsOn: 1 }); // Monday
   const days = Array.from({ length: 7 }, (_, i) => addDays(weekStart, i));
 
@@ -32,7 +34,21 @@ export function WeeklySplit({ currentDate, data }: WeeklySplitProps) {
     <div className="w-full max-w-md mx-auto space-y-2">
       <div className="flex items-center justify-between text-xs text-muted-foreground/60 uppercase tracking-widest mb-3">
         <span>This Week</span>
-        <Dumbbell className="w-3.5 h-3.5" />
+        {onCopyRoutine ? (
+          <button
+            type="button"
+            onClick={onCopyRoutine}
+            aria-label="Copy routine"
+            className="flex items-center gap-1.5 rounded-full px-2.5 py-1.5 normal-case tracking-normal text-muted-foreground hover:bg-muted hover:text-foreground active:scale-95 transition-all"
+          >
+            <Copy className="w-3.5 h-3.5" />
+            <span aria-live="polite">
+              {copyStatus === 'success' ? 'Copied!' : copyStatus === 'error' ? 'Copy failed' : 'Copy routine'}
+            </span>
+          </button>
+        ) : (
+          <Dumbbell className="w-3.5 h-3.5" />
+        )}
       </div>
 
       <div className="space-y-1">
