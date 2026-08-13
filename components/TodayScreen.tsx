@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect, useMemo } from 'react';
-import { Dumbbell, Play, CheckCircle, Smartphone, Flame, ChartBar, Volume2, VolumeX } from 'lucide-react';
+import { Dumbbell, Play, CheckCircle, Smartphone, Flame, ChartBar, Copy, Volume2, VolumeX } from 'lucide-react';
 import { Button } from '@traindaily/ui';
 import {
   ExerciseScreen,
@@ -20,6 +20,7 @@ import { useMobility } from '@/hooks/useMobility';
 import { formatDisplayDate, getWeekNumber } from '@/lib/workout-utils';
 import { getFirstSessionDate } from '@/lib/storage';
 import { getWorkoutType, getTrainingStreak } from '@/lib/schedule';
+import { PUSH_EXERCISES, PULL_EXERCISES, LEGS_EXERCISES } from '@/lib/constants';
 import { syncWithDesktop, getStoredDesktopInfo, clearDesktopInfo } from '@/lib/sync-client';
 import { playWentOffline, playBackOnline, isMuted, setMuted } from '@/lib/audio';
 import { WorkoutErrorBoundary } from './WorkoutErrorBoundary';
@@ -132,6 +133,7 @@ function TodayContent({ date }: { date: Date }) {
   const workoutType = getWorkoutType(date);
   const streak = getTrainingStreak(date, workout.data);
   const [showHistory, setShowHistory] = useState(false);
+  const [copyStatus, setCopyStatus] = useState<'idle' | 'success' | 'error'>('idle');
 
   // Check if desktop is paired
   const [isPaired, setIsPaired] = useState(false);
@@ -160,6 +162,41 @@ function TodayContent({ date }: { date: Date }) {
     clearDesktopInfo();
     setIsPaired(false);
     setSyncStatus('idle');
+  };
+
+  const handleCopyRoutine = async () => {
+    const exercises = workoutType === 'push'
+      ? PUSH_EXERCISES
+      : workoutType === 'pull'
+        ? PULL_EXERCISES
+        : LEGS_EXERCISES;
+    const routine = [
+      `${workoutType.toUpperCase()} ROUTINE`,
+      `${workout.setsPerExercise} sets per exercise`,
+      '',
+      ...exercises.map((exercise, index) => `${index + 1}. ${exercise.name}`),
+    ].join('\n');
+
+    try {
+      if (navigator.clipboard?.writeText) {
+        await navigator.clipboard.writeText(routine);
+      } else {
+        const textarea = document.createElement('textarea');
+        textarea.value = routine;
+        textarea.setAttribute('readonly', '');
+        textarea.style.position = 'fixed';
+        textarea.style.opacity = '0';
+        document.body.appendChild(textarea);
+        textarea.select();
+        const copied = document.execCommand('copy');
+        textarea.remove();
+        if (!copied) throw new Error('Clipboard copy failed');
+      }
+      setCopyStatus('success');
+    } catch {
+      setCopyStatus('error');
+    }
+    setTimeout(() => setCopyStatus('idle'), 2000);
   };
 
   // History screen
@@ -327,6 +364,16 @@ function TodayContent({ date }: { date: Date }) {
           >
             <ChartBar className="w-4 h-4" />
             <span className="text-sm">History</span>
+          </button>
+          <button
+            onClick={handleCopyRoutine}
+            aria-label="Copy routine"
+            className="flex items-center gap-2 px-4 py-2 rounded-full bg-muted/50 hover:bg-muted active:scale-95 transition-all"
+          >
+            <Copy className="w-4 h-4" />
+            <span className="text-sm" aria-live="polite">
+              {copyStatus === 'success' ? 'Copied!' : copyStatus === 'error' ? 'Copy failed' : 'Copy routine'}
+            </span>
           </button>
           <button
             onClick={toggleMute}
